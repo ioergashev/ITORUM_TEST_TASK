@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
+using DG.Tweening;
+using UnityEngine.UI;
+using System;
 
 namespace Itorum
 {
-    public abstract class ScenarioBase : MonoBehaviour
+    public class ScenarioSystem : MonoBehaviour
     {
+        private RuntimeData runtimeData;
+
         private const float skipStepDelay = 0.5f;
 
         private bool isNextStep = false;
 
-        protected readonly List<Action> steps = new List<Action>();
+        protected readonly List<ScenarioStep> steps = new List<ScenarioStep>();
         protected int nextStepIndex = 0;
 
         protected virtual void Awake()
         {
+            runtimeData = FindObjectOfType<RuntimeData>();
             isNextStep = false;
             nextStepIndex = 0;
 
@@ -25,13 +29,25 @@ namespace Itorum
             InitSteps();
         }
 
-        protected abstract void InitSteps();
+        protected void InitSteps()
+        {
+            steps.Add(ScenarioStep.WaitForRocketPrepare);
+            steps.Add(ScenarioStep.WaitForRocketFire);
+            steps.Add(ScenarioStep.HitTracking);
+            steps.Add(ScenarioStep.HitSuccess);
+        }
 
         protected virtual void Start()
         {
             NextStep();
+
+            runtimeData.OnStepComplete.AddListener(StepCompleteAction);
         }
 
+        private void StepCompleteAction()
+        {
+            NextStep();
+        }
 
         private IEnumerator PlayingScenatioRoutine()
         {
@@ -42,9 +58,11 @@ namespace Itorum
                 yield return wait;
                 if (nextStepIndex < steps.Count)
                 {
-                    Debug.Log("Exercise Step Started: " + steps[nextStepIndex].Method.ToString());
+                    runtimeData.CurrentStep = steps[nextStepIndex];
 
-                    steps[nextStepIndex]?.Invoke();
+                    Debug.Log(steps[nextStepIndex]);
+
+                    runtimeData.NextStepRequest?.Invoke();
 
                     nextStepIndex++;
                 }

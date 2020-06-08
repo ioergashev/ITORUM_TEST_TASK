@@ -47,7 +47,13 @@ namespace Itorum
         public UnityEvent OnSetRemoteCamView = new UnityEvent();
 
         [HideInInspector]
-        public UnityEvent OnNextStep = new UnityEvent();
+        public UnityEvent ShowErrorMessageRequest = new UnityEvent();
+
+        [HideInInspector]
+        public UnityEvent NextStepRequest = new UnityEvent();
+
+        [HideInInspector]
+        public UnityEvent OnStepComplete = new UnityEvent();
 
         [HideInInspector]
         public UnityEvent OnRocketHitAirplane = new UnityEvent();

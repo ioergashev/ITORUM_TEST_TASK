@@ -22,5 +22,6 @@ namespace Itorum
         public Text HitSuccessTxt;
 
         public Button RestartBtn;
+        public Text ErrorMessageTxt;
     }
 }

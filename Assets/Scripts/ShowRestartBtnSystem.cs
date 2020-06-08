@@ -1,17 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using DG.Tweening;
 using UnityEngine.UI;
-using Zenject;
 
 namespace Itorum
 {
-    public class RestartSystem : MonoBehaviour
+    public class ShowRestartBtnSystem : MonoBehaviour
     {
-        private UIViewComponent uiView;
-
         private RuntimeData runtimeData;
+        private UIViewComponent uiView;
 
         private void Awake()
         {
@@ -21,12 +19,12 @@ namespace Itorum
 
         private void Start()
         {
-            uiView.RestartBtn.onClick.AddListener(RestartBtnClickAction);
+            runtimeData.OnRocketHitAirplane.AddListener(RocketHitAirplaneAction);
         }
 
-        private void RestartBtnClickAction()
+        private void RocketHitAirplaneAction()
         {
-            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+            uiView.RestartBtn.gameObject.SetActive(true);
         }
     }
 }

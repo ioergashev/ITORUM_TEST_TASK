@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
@@ -20,10 +21,18 @@ namespace Itorum
 
         private void Start()
         {
-            runtimeData.OnRocketHitAirplane.AddListener(RocketHitAirplaneAction);
+            runtimeData.NextStepRequest.AddListener(NextStepRequestAction);
         }
 
-        private void RocketHitAirplaneAction()
+        private void NextStepRequestAction()
+        {
+            if (runtimeData.CurrentStep == ScenarioStep.HitSuccess)
+            {
+                InitStep();
+            }
+        }
+
+        private void InitStep()
         {
             // Переключится на отдаленную камеру
             runtimeData.CurrentCamView = CamViews.Remote;
@@ -33,7 +42,6 @@ namespace Itorum
             runtimeData.OnSetRemoteCamView?.Invoke();
 
             uiView.HitSuccessTxt.gameObject.SetActive(true);
-            uiView.RestartBtn.gameObject.SetActive(true);
         }
     }
 }

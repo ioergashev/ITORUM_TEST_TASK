@@ -22,24 +22,56 @@ namespace Itorum
 
         private void Start()
         {
-            uiView.PrepareBtn.onClick.AddListener(PrepareBtnClickAction);
+            runtimeData.NextStepRequest.AddListener(NextStepRequestAction);
 
-            runtimeData.CurrentStep = ScenarioStep.WaitForRocketPrepare;
+            uiView.PrepareBtn.onClick.AddListener(PrepareBtnClickAction);
         }
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+                PrepareBtnClickAction();
+        }
+
+        private void NextStepRequestAction()
+        {
             if(runtimeData.CurrentStep == ScenarioStep.WaitForRocketPrepare)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
-                    PrepareBtnClickAction();
+                InitStep();
             }
+        }
+
+        private void InitStep()
+        {
+            uiView.PrepareBtn.gameObject.SetActive(true);
+        }
+
+        private void StepCompleteAction()
+        {
+            uiView.PrepareBtn.gameObject.SetActive(false);
+
+            runtimeData.OnStepComplete?.Invoke();
         }
 
         private void PrepareBtnClickAction()
         {
+            if (runtimeData.CurrentStep != ScenarioStep.WaitForRocketPrepare)
+            {
+                return;
+            }
+
+            // Если самолет вне зоны видимости
+            if (!runtimeData.CurrentAirplane.GetComponent<VisibleComponent>().IsVisible)
+            {
+                // Показать ошибку
+                runtimeData.ShowErrorMessageRequest?.Invoke();
+                
+                return;
+            }
+
             Rocket rocket;
 
+            // Показать ракету
             if (rocketStartOrient.isParent)
             {
                 rocket = Instantiate(GameSettings.Instance.RocketPrefab, rocketStartOrient.StartOrient).GetComponent<Rocket>();
@@ -51,7 +83,7 @@ namespace Itorum
 
             runtimeData.CurrentRocket = rocket;
 
-            uiView.PrepareBtn.gameObject.SetActive(false);
+            StepCompleteAction();
         }
     }
 }

@@ -19,31 +19,47 @@ namespace Itorum
 
         private void Start()
         {
-            uiView.PrepareBtn.onClick.AddListener(PrepareBtnClickAction);
+            runtimeData.NextStepRequest.AddListener(NextStepRequestAction);
+
             uiView.FireBtn.onClick.AddListener(FireBtnClickAction);
         }
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+                FireBtnClickAction();
+        }
+
+        private void NextStepRequestAction()
+        {
             if (runtimeData.CurrentStep == ScenarioStep.WaitForRocketFire)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
-                    FireBtnClickAction();
+                InitStep();
             }
         }
 
-        private void PrepareBtnClickAction()
+        private void InitStep()
         {
             uiView.FireBtn.gameObject.SetActive(true);
+        }
 
-            runtimeData.CurrentStep = ScenarioStep.WaitForRocketFire;
+        private void StepCompleteAction()
+        {
+            uiView.FireBtn.gameObject.SetActive(false);
+
+            runtimeData.OnStepComplete?.Invoke();
         }
 
         private void FireBtnClickAction()
         {
+            if (runtimeData.CurrentStep != ScenarioStep.WaitForRocketFire)
+            {
+                return;
+            }
+
             runtimeData.CurrentRocket.GetComponent<MoveComponent>().StartMoveRequest?.Invoke();
 
-            uiView.FireBtn.gameObject.SetActive(false);
+            StepCompleteAction();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Itorum
 
         private void Start()
         {
-            uiView.FireBtn.onClick.AddListener(FireBtnClickAction);
+            runtimeData.NextStepRequest.AddListener(NextStepRequestAction);
 
             uiView.PlayerViewBtn.onClick.AddListener(() => ViewBtnClickAction(CamViews.Player));
             uiView.RocketViewBtn.onClick.AddListener(() => ViewBtnClickAction(CamViews.Rocket));
@@ -44,18 +44,41 @@ namespace Itorum
             }
         }
 
-        private void FireBtnClickAction()
+        private void NextStepRequestAction()
         {
-            runtimeData.CurrentStep = ScenarioStep.HitTracking;
+            if (runtimeData.CurrentStep == ScenarioStep.HitTracking)
+            {
+                InitStep();
+            }
+        }
 
+        private void InitStep()
+        {
             // Включить кнопки выбора режима камеры
             uiView.ViewBtnsContainer.gameObject.SetActive(true);
+
+            ResetViewBtns();
 
             SetBtnHighlightActive(GetViewBtn(CamViews.Player), true);
         }
 
+        private void StepCompleteAction()
+        {
+            // Выключить кнопки выбора режима камеры
+            uiView.ViewBtnsContainer.gameObject.SetActive(false);
+
+            ResetViewBtns();
+
+            runtimeData.OnStepComplete?.Invoke();
+        }
+
         private void ViewBtnClickAction(CamViews view)
         {
+            if (runtimeData.CurrentStep != ScenarioStep.HitTracking)
+            {
+                return;
+            }
+
             ResetViewBtns();
 
             // Выделить нажатую кнопку
@@ -110,12 +133,12 @@ namespace Itorum
 
         private void RocketHitAirplaneAction()
         {
-            ResetViewBtns();
+            if (runtimeData.CurrentStep != ScenarioStep.HitTracking)
+            {
+                return;
+            }
 
-            runtimeData.CurrentStep = ScenarioStep.HitSuccess;
-
-            // Выключить кнопки выбора режима камеры
-            uiView.ViewBtnsContainer.gameObject.SetActive(false);
+            StepCompleteAction();
         }
     }
 }
