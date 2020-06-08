@@ -23,9 +23,20 @@ namespace Itorum
             uiView.FireBtn.onClick.AddListener(FireBtnClickAction);
         }
 
+        private void Update()
+        {
+            if (runtimeData.CurrentStep == ScenarioStep.WaitForRocketFire)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                    FireBtnClickAction();
+            }
+        }
+
         private void PrepareBtnClickAction()
         {
             uiView.FireBtn.gameObject.SetActive(true);
+
+            runtimeData.CurrentStep = ScenarioStep.WaitForRocketFire;
         }
 
         private void FireBtnClickAction()

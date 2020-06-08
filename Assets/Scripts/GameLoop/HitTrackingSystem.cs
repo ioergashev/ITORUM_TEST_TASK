@@ -25,11 +25,13 @@ namespace Itorum
             uiView.PlayerViewBtn.onClick.AddListener(() => ViewBtnClickAction(CamViews.Player));
             uiView.RocketViewBtn.onClick.AddListener(() => ViewBtnClickAction(CamViews.Rocket));
             uiView.RemoteViewBtn.onClick.AddListener(() => ViewBtnClickAction(CamViews.Remote));
+
+            runtimeData.OnRocketHitAirplane.AddListener(RocketHitAirplaneAction);
         }
 
         private void Update()
         {
-            if(runtimeData.IsHitTracking)
+            if(runtimeData.CurrentStep == ScenarioStep.HitTracking)
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                     ViewBtnClickAction(CamViews.Player);
@@ -44,18 +46,17 @@ namespace Itorum
 
         private void FireBtnClickAction()
         {
+            runtimeData.CurrentStep = ScenarioStep.HitTracking;
+
             // Включить кнопки выбора режима камеры
             uiView.ViewBtnsContainer.gameObject.SetActive(true);
 
-            runtimeData.IsHitTracking = true;
+            SetBtnHighlightActive(GetViewBtn(CamViews.Player), true);
         }
 
         private void ViewBtnClickAction(CamViews view)
         {
-            // Сбросить выделение для всех кнопок
-            SetBtnHighlightActive(uiView.PlayerViewBtn, false);
-            SetBtnHighlightActive(uiView.RocketViewBtn, false);
-            SetBtnHighlightActive(uiView.RemoteViewBtn, false);
+            ResetViewBtns();
 
             // Выделить нажатую кнопку
             SetBtnHighlightActive(GetViewBtn(view), true);
@@ -79,6 +80,14 @@ namespace Itorum
             }
         }
 
+        private void ResetViewBtns()
+        {
+            // Сбросить выделение для всех кнопок
+            SetBtnHighlightActive(uiView.PlayerViewBtn, false);
+            SetBtnHighlightActive(uiView.RocketViewBtn, false);
+            SetBtnHighlightActive(uiView.RemoteViewBtn, false);
+        }
+
         private Button GetViewBtn(CamViews view)
         {
             switch (view)
@@ -97,6 +106,16 @@ namespace Itorum
         private void SetBtnHighlightActive(Button btn, bool value)
         {
             btn.GetComponent<Image>().color = value == true? uiView.ActiveBtnColor: uiView.InactiveBtnColor;
+        }
+
+        private void RocketHitAirplaneAction()
+        {
+            ResetViewBtns();
+
+            runtimeData.CurrentStep = ScenarioStep.HitSuccess;
+
+            // Выключить кнопки выбора режима камеры
+            uiView.ViewBtnsContainer.gameObject.SetActive(false);
         }
     }
 }

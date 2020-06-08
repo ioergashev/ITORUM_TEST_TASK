@@ -18,5 +18,9 @@ namespace Itorum
 
         public Color ActiveBtnColor = Color.green;
         public Color InactiveBtnColor = Color.white;
+
+        public Text HitSuccessTxt;
+
+        public Button RestartBtn;
     }
 }

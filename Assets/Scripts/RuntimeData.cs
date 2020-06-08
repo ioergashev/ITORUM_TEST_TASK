@@ -14,6 +14,15 @@ namespace Itorum
         Remote
     }
 
+    public enum ScenarioStep
+    {
+        None,
+        WaitForRocketPrepare,
+        WaitForRocketFire,
+        HitTracking,
+        HitSuccess
+    }
+
     public class RuntimeData : MonoBehaviour
     {
         [HideInInspector]
@@ -26,6 +35,9 @@ namespace Itorum
         public CamViews CurrentCamView = CamViews.Player;
 
         [HideInInspector]
+        public ScenarioStep CurrentStep = ScenarioStep.WaitForRocketPrepare;
+
+        [HideInInspector]
         public UnityEvent OnSetCamView = new UnityEvent();
         [HideInInspector]
         public UnityEvent OnSetPlayerCamView = new UnityEvent();
@@ -34,6 +46,10 @@ namespace Itorum
         [HideInInspector]
         public UnityEvent OnSetRemoteCamView = new UnityEvent();
 
-        public bool IsHitTracking = false;
+        [HideInInspector]
+        public UnityEvent OnNextStep = new UnityEvent();
+
+        [HideInInspector]
+        public UnityEvent OnRocketHitAirplane = new UnityEvent();
     }
 }

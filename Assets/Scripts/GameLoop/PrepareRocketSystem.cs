@@ -23,6 +23,17 @@ namespace Itorum
         private void Start()
         {
             uiView.PrepareBtn.onClick.AddListener(PrepareBtnClickAction);
+
+            runtimeData.CurrentStep = ScenarioStep.WaitForRocketPrepare;
+        }
+
+        private void Update()
+        {
+            if(runtimeData.CurrentStep == ScenarioStep.WaitForRocketPrepare)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                    PrepareBtnClickAction();
+            }
         }
 
         private void PrepareBtnClickAction()
