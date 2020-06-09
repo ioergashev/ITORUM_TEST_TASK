@@ -10,12 +10,8 @@ namespace Itorum
         [Inject(Id = "airplane_origin")]
         private StartOrientationComponent airplaneStartOrient;
 
+        [Inject]
         private RuntimeData runtimeData;
-
-        private void Awake()
-        {
-            runtimeData = FindObjectOfType<RuntimeData>();
-        }
 
         private void Start()
         {

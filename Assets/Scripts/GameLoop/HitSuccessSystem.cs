@@ -9,15 +9,11 @@ namespace Itorum
 {
     public class HitSuccessSystem : MonoBehaviour
     {
+        [Inject]
         private UIViewComponent uiView;
 
+        [Inject]
         private RuntimeData runtimeData;
-
-        private void Awake()
-        {
-            uiView = FindObjectOfType<UIViewComponent>();
-            runtimeData = FindObjectOfType<RuntimeData>();
-        }
 
         private void Start()
         {

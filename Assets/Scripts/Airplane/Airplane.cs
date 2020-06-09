@@ -6,6 +6,11 @@ namespace Itorum
 {
     public class Airplane : MonoBehaviour
     {
-       
+        public VisibleComponent VisibleComponent;
+
+        private void Awake()
+        {
+            VisibleComponent = GetComponent<VisibleComponent>();
+        }
     }
 }

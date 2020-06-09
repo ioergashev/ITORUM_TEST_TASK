@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Itorum
 {
@@ -14,11 +15,11 @@ namespace Itorum
 
         private void Awake()
         {
+            runtimeData = FindObjectOfType<RuntimeData>();
             speedComponent = GetComponent<SpeedComponent>();
             rocket = GetComponent<Rocket>();
             rigidbody = GetComponent<Rigidbody>();
             moveComponent = GetComponent<MoveComponent>();
-            runtimeData = FindObjectOfType<RuntimeData>();
         }
 
         private void Start()

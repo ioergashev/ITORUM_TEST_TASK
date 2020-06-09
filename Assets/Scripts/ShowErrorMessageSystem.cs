@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Itorum
 {
     public class ShowErrorMessageSystem : MonoBehaviour
     {
+        [Inject]
         private RuntimeData runtimeData;
+        [Inject]
         private UIViewComponent uiView;
-
-        private void Awake()
-        {
-            uiView = FindObjectOfType<UIViewComponent>();
-            runtimeData = FindObjectOfType<RuntimeData>();
-        }
 
         private void Start()
         {

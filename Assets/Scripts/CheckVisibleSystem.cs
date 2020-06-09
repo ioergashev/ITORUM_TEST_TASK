@@ -21,7 +21,18 @@ namespace Itorum
 
         private void Update()
         {
-            visibleComponent.IsVisible = renderers.Any(r => r.isVisible);
+            bool wasVisible = visibleComponent.IsVisible;
+
+            bool isVisible = visibleComponent.IsVisible = renderers.Any(r => r.isVisible);
+
+            if(wasVisible && !isVisible)
+            {
+                visibleComponent.OnVisibleEnd?.Invoke();
+            }
+            else if(!wasVisible && isVisible)
+            {
+                visibleComponent.OnVisibleBegin?.Invoke();
+            }
         }
     }
 }

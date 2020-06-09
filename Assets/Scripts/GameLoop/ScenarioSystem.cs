@@ -4,11 +4,13 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using System;
+using Zenject;
 
 namespace Itorum
 {
     public class ScenarioSystem : MonoBehaviour
     {
+        [Inject]
         private RuntimeData runtimeData;
 
         private const float skipStepDelay = 0.5f;
@@ -20,7 +22,6 @@ namespace Itorum
 
         protected virtual void Awake()
         {
-            runtimeData = FindObjectOfType<RuntimeData>();
             isNextStep = false;
             nextStepIndex = 0;
 
@@ -59,8 +60,6 @@ namespace Itorum
                 if (nextStepIndex < steps.Count)
                 {
                     runtimeData.CurrentStep = steps[nextStepIndex];
-
-                    Debug.Log(steps[nextStepIndex]);
 
                     runtimeData.NextStepRequest?.Invoke();
 

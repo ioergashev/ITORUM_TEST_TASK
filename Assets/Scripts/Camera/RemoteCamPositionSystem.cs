@@ -8,15 +8,15 @@ namespace Itorum
 {
     public class RemoteCamPositionSystem : MonoBehaviour
     {
+        [Inject]
         private RuntimeData runtimeData;
+        [Inject]
         private Player player;
         private DistanceComponent distanceComponent;
         private bool needReinstal = true;
 
         private void Awake()
         {
-            runtimeData = FindObjectOfType<RuntimeData>();
-            player = FindObjectOfType<Player>();
             distanceComponent = GetComponent<DistanceComponent>();
         }
 

@@ -7,18 +7,14 @@ namespace Itorum
 {
     public class PrepareRocketSystem : MonoBehaviour
     {
+        [Inject]
         private UIViewComponent uiView;
 
         [Inject(Id = "rocket_origin")]
         private StartOrientationComponent rocketStartOrient;
 
+        [Inject]
         private RuntimeData runtimeData;
-
-        private void Awake()
-        {
-            uiView = FindObjectOfType<UIViewComponent>();
-            runtimeData = FindObjectOfType<RuntimeData>();
-        }
 
         private void Start()
         {
